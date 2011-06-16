@@ -1,0 +1,9 @@
+﻿
+## Interface: 40100
+## Title: GuideLines
+## Version: 1.0
+## Author: Cybeloras of Mal'Ganis
+## Notes: Allows you to create guides to aid in UI element placement
+
+
+GuideLines.xml
