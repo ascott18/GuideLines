@@ -5,5 +5,8 @@
 ## Author: Cybeloras of Mal'Ganis
 ## Notes: Allows you to create guides to aid in UI element placement
 
+## LoadManagers: AddonLoader
+## X-LoadOn-Slash: /guidelines, /guides
+
 
 GuideLines.xml
