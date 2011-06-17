@@ -1,6 +1,23 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ .. \FrameXML\UI.xsd">
 	
+	<!-- PARENT -->
 	
+	<Frame name="GuideLines" parent="UIParent" setAllPoints="true" hidden="true">
+		<Scripts>
+			<OnLoad>
+				SLASH_GUIDELINES1, SLASH_GUIDELINES2 = "/guidelines", "/guides"
+				function SlashCmdList.GUIDELINES() 
+					if self:IsShown() then
+						self:Hide()
+					else
+						self:Show()
+					end
+				end
+				self.rulersize = 20
+				self.guidesize = 5
+			</OnLoad>
+		</Scripts>
+	</Frame>
 	
 	<!-- TEMPLATES -->
 	
@@ -129,7 +146,7 @@
 		</Scripts>
 	</Button>
 	
-	<Button name="GuideLines_RulerTemplate" virtual="true" frameStrata="FULLSCREEN_DIALOG" enableMouse="true" frameLevel="100">
+	<Button name="GuideLines_RulerTemplate" virtual="true" parent="GuideLines" frameStrata="FULLSCREEN_DIALOG" enableMouse="true" frameLevel="100">
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture setAllPoints="true" parentKey="tex">
@@ -171,139 +188,120 @@ Type "/guidelines" to hide all rulers and guides.]]
 	
 	<!-- END TEMPLATES -->
 	
-	<Frame name="GuideLines" parent="UIParent" setAllPoints="true" hidden="true">
+	<Button name="GuideLines_HorizRuler" inherits="GuideLines_RulerTemplate">
+		<Anchors>
+			<Anchor point="TOPLEFT"/>
+			<Anchor point="TOPRIGHT"/>
+		</Anchors>
 		<Scripts>
 			<OnLoad>
-				SLASH_GUIDELINES1, SLASH_GUIDELINES2 = "/guidelines", "/guides"
-				function SlashCmdList.GUIDELINES() 
-					if self:IsShown() then
-						self:Hide()
-					else
-						self:Show()
+				self:RegisterForClicks("RightButtonUp")
+				self:RegisterForDrag("LeftButton")
+				self.point = -1
+				self.template = "GuideLines_HorizGuideTemplate"
+				self.tick:ClearAllPoints()
+				self.tick:SetSize(2, GuideLines.rulersize)
+				self:SetHeight(GuideLines.rulersize)
+				
+				self.ticks = {}
+				for i = 0, self:GetWidth()/2 + 50, 50 do
+					local t = self:CreateTexture(nil, "OVERLAY")
+					t:SetSize(1, self:GetHeight())
+					t:SetPoint("CENTER", self, "CENTER", i, 0)
+					t:SetTexture(0, 0, 0, 1)
+					local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+					f:SetPoint("LEFT", self, "CENTER", i, 0)
+					f:SetText(i)
+					
+					local t = self:CreateTexture(nil, "OVERLAY")
+					t:SetSize(1, self:GetHeight())
+					t:SetPoint("CENTER", self, "CENTER", -i, 0)
+					t:SetTexture(0, 0, 0, 1)
+					if i ~= 0 then
+						local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+						f:SetPoint("LEFT", self, "CENTER", -i, 0)
+						f:SetText(i)
 					end
 				end
-				self.rulersize = 20
-				self.guidesize = 5
+
 			</OnLoad>
+			<OnClick>
+				if button == "RightButton" then
+					self:ClearAllPoints()
+					if self.point == 1 then
+						self:SetPoint("TOPLEFT")
+						self:SetPoint("TOPRIGHT")
+					else
+						self:SetPoint("BOTTOMLEFT")
+						self:SetPoint("BOTTOMRIGHT")
+					end
+					self.point = -self.point
+				end
+			</OnClick>
+			<OnUpdate>
+				self.tick:SetPoint("TOPLEFT", self, "TOPLEFT", GetCursorPosition()/UIParent:GetScale(), 0)
+			</OnUpdate>
 		</Scripts>
-		<Frames>
-		
-			<Button name="GuideLines_HorizRuler" inherits="GuideLines_RulerTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT"/>
-					<Anchor point="TOPRIGHT"/>
-				</Anchors>
-				<Scripts>
-					<OnLoad>
-						self:RegisterForClicks("RightButtonUp")
-						self:RegisterForDrag("LeftButton")
-						self.point = -1
-						self.template = "GuideLines_HorizGuideTemplate"
-						self.tick:ClearAllPoints()
-						self.tick:SetSize(2, GuideLines.rulersize)
-						self:SetHeight(GuideLines.rulersize)
+	</Button>
+	
+	<Button name="GuideLines_VertRuler" inherits="GuideLines_RulerTemplate">
+			<Anchors>
+				<Anchor point="TOPLEFT"/>
+				<Anchor point="BOTTOMLEFT"/>
+			</Anchors>
+			<Scripts>
+				<OnLoad>
+					self:RegisterForClicks("RightButtonUp")
+					self:RegisterForDrag("LeftButton")
+					self.point = -1
+					self.template = "GuideLines_VertGuideTemplate"
+					self.tick:ClearAllPoints()
+					self.tick:SetSize(GuideLines.rulersize, 2)
+					self:SetWidth(GuideLines.rulersize)
+					
+					self.ticks = {}
+					for i = 0, self:GetHeight()/2 + 50, 50 do
+						local t = self:CreateTexture(nil, "OVERLAY")
+						t:SetSize(self:GetWidth(), 1)
+						t:SetPoint("CENTER", self, "CENTER", 0, i)
+						t:SetTexture(0, 0, 0, 1)
+						local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+						f:SetPoint("TOP", self, "CENTER", 0, i)
+						f:SetText(i)
 						
-						self.ticks = {}
-						for i = 0, self:GetWidth()/2 + 50, 50 do
-							local t = self:CreateTexture(nil, "OVERLAY")
-							t:SetSize(1, self:GetHeight())
-							t:SetPoint("CENTER", self, "CENTER", i, 0)
-							t:SetTexture(0, 0, 0, 1)
+						local t = self:CreateTexture(nil, "OVERLAY")
+						t:SetSize(self:GetWidth(), 1)
+						t:SetPoint("CENTER", self, "CENTER", 0, -i)
+						t:SetTexture(0, 0, 0, 1)
+						if i ~= 0 then
 							local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-							f:SetPoint("LEFT", self, "CENTER", i, 0)
+							f:SetPoint("TOP", self, "CENTER", 0, -i)
 							f:SetText(i)
-							
-							local t = self:CreateTexture(nil, "OVERLAY")
-							t:SetSize(1, self:GetHeight())
-							t:SetPoint("CENTER", self, "CENTER", -i, 0)
-							t:SetTexture(0, 0, 0, 1)
-							if i ~= 0 then
-								local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-								f:SetPoint("LEFT", self, "CENTER", -i, 0)
-								f:SetText(i)
-							end
 						end
+					end
 
-					</OnLoad>
-					<OnClick>
-						if button == "RightButton" then
-							self:ClearAllPoints()
-							if self.point == 1 then
-								self:SetPoint("TOPLEFT")
-								self:SetPoint("TOPRIGHT")
-							else
-								self:SetPoint("BOTTOMLEFT")
-								self:SetPoint("BOTTOMRIGHT")
-							end
-							self.point = -self.point
+				</OnLoad>
+				<OnClick>
+					if button == "RightButton" then
+						self:ClearAllPoints()
+						if self.point == 1 then
+							self:SetPoint("TOPLEFT")
+							self:SetPoint("BOTTOMLEFT")
+						else
+							self:SetPoint("TOPRIGHT")
+							self:SetPoint("BOTTOMRIGHT")
 						end
-					</OnClick>
-					<OnUpdate>
-						self.tick:SetPoint("TOPLEFT", self, "TOPLEFT", GetCursorPosition()/UIParent:GetScale(), 0)
-					</OnUpdate>
-				</Scripts>
-			</Button>
-			
-			<Button name="GuideLines_VertRuler" inherits="GuideLines_RulerTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT"/>
-					<Anchor point="BOTTOMLEFT"/>
-				</Anchors>
-				<Scripts>
-					<OnLoad>
-						self:RegisterForClicks("RightButtonUp")
-						self:RegisterForDrag("LeftButton")
-						self.point = -1
-						self.template = "GuideLines_VertGuideTemplate"
-						self.tick:ClearAllPoints()
-						self.tick:SetSize(GuideLines.rulersize, 2)
-						self:SetWidth(GuideLines.rulersize)
-						
-						self.ticks = {}
-						for i = 0, self:GetHeight()/2 + 50, 50 do
-							local t = self:CreateTexture(nil, "OVERLAY")
-							t:SetSize(self:GetWidth(), 1)
-							t:SetPoint("CENTER", self, "CENTER", 0, i)
-							t:SetTexture(0, 0, 0, 1)
-							local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-							f:SetPoint("TOP", self, "CENTER", 0, i)
-							f:SetText(i)
-							
-							local t = self:CreateTexture(nil, "OVERLAY")
-							t:SetSize(self:GetWidth(), 1)
-							t:SetPoint("CENTER", self, "CENTER", 0, -i)
-							t:SetTexture(0, 0, 0, 1)
-							if i ~= 0 then
-								local f = self:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-								f:SetPoint("TOP", self, "CENTER", 0, -i)
-								f:SetText(i)
-							end
-						end
+						self.point = -self.point
+					end
+				</OnClick>
+				<OnUpdate>
+					self.tick:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 0, select(2, GetCursorPosition())/UIParent:GetScale())
+				</OnUpdate>
+			</Scripts>
+		</Button>
 
-					</OnLoad>
-					<OnClick>
-						if button == "RightButton" then
-							self:ClearAllPoints()
-							if self.point == 1 then
-								self:SetPoint("TOPLEFT")
-								self:SetPoint("BOTTOMLEFT")
-							else
-								self:SetPoint("TOPRIGHT")
-								self:SetPoint("BOTTOMRIGHT")
-							end
-							self.point = -self.point
-						end
-					</OnClick>
-					<OnUpdate>
-						self.tick:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 0, select(2, GetCursorPosition())/UIParent:GetScale())
-					</OnUpdate>
-				</Scripts>
-			</Button>
-	
-		</Frames>
-	</Frame>
-	
-	
+
+
 </Ui>
 
 
