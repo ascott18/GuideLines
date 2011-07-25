@@ -180,7 +180,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnDragStart>
-				CreateFrame("Button", nil, self, self.template)
+				CreateFrame("Button", nil, self, self:GetName():match("(.*)Ruler") .. "GuideTemplate")
 			</OnDragStart>
 		</Scripts>
 	</Button>
@@ -198,7 +198,6 @@ Type "/guidelines" to hide all rulers and guides.]]
 				self:RegisterForClicks("RightButtonUp")
 				self:RegisterForDrag("LeftButton")
 				self.point = -1
-				self.template = "GuideLines_HorizGuideTemplate"
 				self.tick:ClearAllPoints()
 				self.tick:SetSize(2, GuideLines.rulersize)
 				self:SetHeight(GuideLines.rulersize)
@@ -254,7 +253,6 @@ Type "/guidelines" to hide all rulers and guides.]]
 					self:RegisterForClicks("RightButtonUp")
 					self:RegisterForDrag("LeftButton")
 					self.point = -1
-					self.template = "GuideLines_VertGuideTemplate"
 					self.tick:ClearAllPoints()
 					self.tick:SetSize(GuideLines.rulersize, 2)
 					self:SetWidth(GuideLines.rulersize)
