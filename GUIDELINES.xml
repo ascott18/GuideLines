@@ -71,9 +71,9 @@
 				
 				if GuideLines.dragging then
 					if floor(GuideLines.dragging:GetWidth() + 0.5) == GuideLines.guidesize then
-						cX = GuideLines.dragging:GetLeft() + (GuideLines.guidesize*0.5)
+						cX = GuideLines.dragging:GetLeft() + (GuideLines.guidesize/2)
 					else
-						cY = GuideLines.dragging:GetBottom() + (GuideLines.guidesize*0.5)
+						cY = GuideLines.dragging:GetBottom() + (GuideLines.guidesize/2)
 					end
 				end
 				
