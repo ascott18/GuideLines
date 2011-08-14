@@ -3,6 +3,51 @@
 	<!-- PARENT -->
 	
 	<Frame name="GuideLines" parent="UIParent" setAllPoints="true" hidden="true">
+		<Frames>
+			<Frame name="GuideLinesTT" frameStrata="FULLSCREEN_DIALOG">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color r="1" g="1" b="0.5" a="1"/>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString parentKey="text" inherits="NumberFontNormal" justifyH="LEFT" justifyV="CENTER">
+							<Anchors>
+								<Anchor point="LEFT" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						function self:SetText(str)
+							self.text:SetText(str)
+							local x, y = self.text:GetSize()
+							self:SetSize(x, y+2)
+							self:Show()
+						end
+						function self:Attach()
+							self:ClearAllPoints()
+							if GuideLines_HorizRuler.point == -1 then
+								self:SetPoint("TOP", GuideLines_HorizRuler, "BOTTOM", 0, -1)
+							else
+								self:SetPoint("BOTTOM", GuideLines_HorizRuler, "TOP", 0, 1)
+							end
+							if GuideLines_VertRuler.point == -1 then
+								self:SetPoint("LEFT", GuideLines_VertRuler, "RIGHT", 1, 0)
+							else
+								self:SetPoint("RIGHT", GuideLines_VertRuler, "LEFT", -1, 0)
+							end
+						end
+						self:SetFrameLevel(100)
+					</OnLoad>
+					<OnShow>
+						self:Attach()
+					</OnShow>
+				</Scripts>
+			</Frame>
+		</Frames>
 		<Scripts>
 			<OnLoad>
 				SLASH_GUIDELINES1, SLASH_GUIDELINES2 = "/guidelines", "/guides"
@@ -15,7 +60,27 @@
 				end
 				self.rulersize = 20
 				self.guidesize = 5
+				self:SetFrameLevel(100)
 			</OnLoad>
+			<OnUpdate>
+				local wX, wY = UIParent:GetSize()
+				wX, wY = wX/2, wY/2
+				
+				local cX, cY = GetCursorPosition()
+				cX, cY = cX/UIParent:GetScale(), cY/UIParent:GetScale()
+				
+				if GuideLines.dragging then
+					if floor(GuideLines.dragging:GetWidth() + 0.5) == GuideLines.guidesize then
+						cX = GuideLines.dragging:GetLeft() + (GuideLines.guidesize*0.5)
+					else
+						cY = GuideLines.dragging:GetBottom() + (GuideLines.guidesize*0.5)
+					end
+				end
+				
+				local X, Y = floor((cX-wX) * 10 + 0.5) / 10, floor((cY-wY) * 10 + 0.5) / 10
+
+				GuideLinesTT:SetText("(" .. X .. ", " .. Y .. ")")
+			</OnUpdate>
 		</Scripts>
 	</Frame>
 	
@@ -49,7 +114,7 @@
 			<OnDragStart>
 				self:StartMoving()
 				self.lockhighlight = nil
-				GuideLines.dragging = guide
+				GuideLines.dragging = self
 			</OnDragStart>
 		</Scripts>
 	</Button>
@@ -94,6 +159,7 @@
 				self:SetFrameLevel(self:GetParent():GetFrameLevel() - 1)
 				
 				self.lockhighlight = 1
+				self.isOver = 1
 				GuideLines.dragging = self
 				
 			</OnLoad>
@@ -140,6 +206,7 @@
 				self:SetFrameLevel(self:GetParent():GetFrameLevel() - 1)
 				
 				self.lockhighlight = 1
+				self.isOver = 1
 				GuideLines.dragging = self
 				
 			</OnLoad>
@@ -161,6 +228,7 @@
 		</Layers>
 		<Scripts>
 			<OnEnter>
+				if IsMouseButtonDown("LeftButton") or IsMouseButtonDown("RightButton") then return end
 				local title = [[GuideLines]]
 				local text =
 [[Left-click and drag from a ruler onto the screen to create a new guide.
@@ -182,6 +250,9 @@ Type "/guidelines" to hide all rulers and guides.]]
 			<OnDragStart>
 				CreateFrame("Button", nil, self, self:GetName():match("(.*)Ruler") .. "GuideTemplate")
 			</OnDragStart>
+			<OnMouseDown>
+				GameTooltip:Hide()
+			</OnMouseDown>
 		</Scripts>
 	</Button>
 	
@@ -235,6 +306,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 						self:SetPoint("BOTTOMRIGHT")
 					end
 					self.point = -self.point
+					GuideLinesTT:Attach()
 				end
 			</OnClick>
 			<OnUpdate>
@@ -290,6 +362,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 							self:SetPoint("BOTTOMRIGHT")
 						end
 						self.point = -self.point
+						GuideLinesTT:Attach()
 					end
 				</OnClick>
 				<OnUpdate>
@@ -297,8 +370,6 @@ Type "/guidelines" to hide all rulers and guides.]]
 				</OnUpdate>
 			</Scripts>
 		</Button>
-
-
 
 </Ui>
 
