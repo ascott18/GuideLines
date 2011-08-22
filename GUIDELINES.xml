@@ -86,7 +86,6 @@
 					if GuideLinesDB then
 						for i, db in pairs(GuideLinesDB.guides) do
 							GuideLines.LoadingDB = 1
-							print(db.parent, _G[db.parent], db.template)
 							local guide = CreateFrame("Button", nil, _G[db.parent], db.template)
 							guide:ClearAllPoints()
 							guide:SetPoint(db.point[1], UIParent, db.point[3], db.point[4], db.point[5])
