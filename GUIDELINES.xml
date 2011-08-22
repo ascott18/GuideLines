@@ -14,11 +14,7 @@
 						</Texture>
 					</Layer>
 					<Layer level="OVERLAY">
-						<FontString parentKey="text" inherits="NumberFontNormal" justifyH="LEFT" justifyV="CENTER">
-							<Anchors>
-								<Anchor point="LEFT" />
-							</Anchors>
-						</FontString>
+						<FontString parentKey="text" inherits="NumberFontNormal" justifyH="LEFT" justifyV="CENTER"/>
 					</Layer>
 				</Layers>
 				<Scripts>
@@ -164,13 +160,14 @@
 					tDeleteItem(GuideLinesDB.guides, self.db)
 				end
 				self.db.point = {self:GetPoint()}
+				self.db.point[2] = nil
 				
 				self:StopMovingOrSizing()
 				self.lockhighlight = nil
 				GuideLines.dragging = nil
 			</OnDragStop>
 			<OnUpdate>
-				if IsMouseButtonDown("LeftButton") then
+				if IsMouseButtonDown("LeftButton") and not GuideLines.LoadingDB then
 					self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", GetCursorPosition()/UIParent:GetScale()-GuideLines.guidesize/2, 0)
 				else
 					self:SetScript("OnUpdate", nil)
@@ -219,13 +216,14 @@
 					tDeleteItem(GuideLinesDB.guides, self.db)
 				end
 				self.db.point = {self:GetPoint()}
+				self.db.point[2] = nil
 				
 				self:StopMovingOrSizing()
 				self.lockhighlight = nil
 				GuideLines.dragging = nil
 			</OnDragStop>
 			<OnUpdate>
-				if IsMouseButtonDown("LeftButton") then
+				if IsMouseButtonDown("LeftButton") and not GuideLines.LoadingDB then
 					self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, select(2, GetCursorPosition())/UIParent:GetScale()-GuideLines.guidesize/2)
 				else
 					self:SetScript("OnUpdate", nil)
