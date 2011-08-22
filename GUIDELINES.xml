@@ -82,7 +82,7 @@
 				GuideLinesTT:SetText("(" .. X .. ", " .. Y .. ")")
 			</OnUpdate>
 			<OnEvent>
-				if event == "ADDON_LOADED" and ... == "GuideLines" then
+				if ... == "GuideLines" then
 					if GuideLinesDB then
 						for i, db in pairs(GuideLinesDB.guides) do
 							GuideLines.LoadingDB = 1
@@ -157,6 +157,7 @@
 					(self:GetParent().point == 1 and GetScreenWidth()*UIParent:GetScale() - X &lt; GuideLines.rulersize + GuideLines.guidesize/2)
 				then
 					tDeleteItem(GuideLinesDB.guides, self.db)
+					self:Hide()
 				end
 				self.db.point = {self:GetPoint()}
 				self.db.point[2] = nil
@@ -213,6 +214,7 @@
 					(self:GetParent().point == 1 and Y &lt; GuideLines.rulersize + GuideLines.guidesize/2)
 				then
 					tDeleteItem(GuideLinesDB.guides, self.db)
+					self:Hide()
 				end
 				self.db.point = {self:GetPoint()}
 				self.db.point[2] = nil
