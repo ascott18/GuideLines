@@ -1,7 +1,7 @@
 ﻿
 ## Interface: 40200
 ## Title: GuideLines
-## Version: 3.1.0
+## Version: 3.1.1
 ## Author: Cybeloras of Mal'Ganis
 ## Notes: Allows you to create guides to aid in UI element placement.
 ## SavedVariablesPerCharacter: GuideLinesDB
