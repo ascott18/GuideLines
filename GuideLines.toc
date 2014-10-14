@@ -1,7 +1,8 @@
 ﻿
-## Interface: 50300
+## Interface: 60000
+## X-Compatible-With: 50400
 ## Title: GuideLines
-## Version: 3.3.1
+## Version: 3.3.2
 ## Author: Cybeloras of Detheroc/Mal'Ganis
 ## Notes: Allows you to create guides to aid in UI element placement.
 ## SavedVariablesPerCharacter: GuideLinesDB

@@ -68,8 +68,9 @@
 				function GuideLines:SetAnchoredPoints(guide)
 					-- stolen from TMW, with modifications
 					MeasureFrame:ClearAllPoints()
-					MeasureFrame:SetPoint("TOPLEFT", guide, "CENTER")
-					MeasureFrame:SetPoint("BOTTOMRIGHT", UIParent, "CENTER")
+					MeasureFrame:SetPoint("TOPRIGHT", guide, "CENTER")
+					MeasureFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT")
+
 
 					local X = MeasureFrame:GetWidth()/UIParent:GetScale()/guide:GetScale()
 					local Y = MeasureFrame:GetHeight()/UIParent:GetScale()/guide:GetScale()
@@ -78,11 +79,11 @@
 					elseif guide.db.template == "GuideLines_HorizGuideTemplate" then
 						X = 0
 					end
+
 					guide:ClearAllPoints()
-					guide:SetPoint("CENTER", UIParent, "CENTER", -X, Y)
-					return "CENTER", nil, "CENTER", -X, Y
+					guide:SetPoint("CENTER", UIParent, "BOTTOMLEFT", X, Y)
+					return "CENTER", nil, "CENTER", X, Y
 				end
-				
 			</OnLoad>
 			<OnUpdate>
 				local wX, wY = UIParent:GetSize()
