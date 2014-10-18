@@ -82,7 +82,7 @@
 
 					guide:ClearAllPoints()
 					guide:SetPoint("CENTER", UIParent, "BOTTOMLEFT", X, Y)
-					return "CENTER", nil, "CENTER", X, Y
+					return "CENTER", nil, "BOTTOMLEFT", X, Y
 				end
 			</OnLoad>
 			<OnUpdate>
