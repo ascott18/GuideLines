@@ -151,7 +151,7 @@
 		<Scripts>
 			<OnEnter>
 				if not GuideLines.dragging or GuideLines.dragging == self then
-					self.tex:SetTexture(.25,.92,1,1)
+					self.tex:SetColorTexture(.25,.92,1,1)
 				end
 			</OnEnter>
 			<OnMouseDown>
@@ -162,7 +162,7 @@
 			</OnMouseUp>
 			<OnLeave>
 				if not self.lockhighlight then
-					self.tex:SetTexture(0,0,0,1)
+					self.tex:SetColorTexture(0,0,0,1)
 				end
 			</OnLeave>
 			<OnDragStart>
@@ -364,7 +364,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 						local t = self:CreateTexture(nil, "OVERLAY")
 						t:SetSize(1, self:GetHeight())
 						t:SetPoint("CENTER", self, "CENTER", i, 0)
-						t:SetTexture(0, 0, 0, 1)
+						t:SetColorTexture(0, 0, 0, 1)
 						self.ticks[i] = t
 					end
 					
@@ -379,7 +379,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 					
 					if not self.ticks[-i] then
 						local t = self:CreateTexture(nil, "OVERLAY")
-						t:SetTexture(0, 0, 0, 1)
+						t:SetColorTexture(0, 0, 0, 1)
 						t:SetSize(1, self:GetHeight())
 						t:SetPoint("CENTER", self, "CENTER", -i, 0)
 						self.ticks[-i] = t
@@ -443,7 +443,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 						local t = self:CreateTexture(nil, "OVERLAY")
 						t:SetSize(self:GetWidth(), 1)
 						t:SetPoint("CENTER", self, "CENTER", 0, i)
-						t:SetTexture(0, 0, 0, 1)
+						t:SetColorTexture(0, 0, 0, 1)
 						self.ticks[i] = t
 					end
 					
@@ -460,7 +460,7 @@ Type "/guidelines" to hide all rulers and guides.]]
 						local t = self:CreateTexture(nil, "OVERLAY")
 						t:SetSize(self:GetWidth(), 1)
 						t:SetPoint("CENTER", self, "CENTER", 0, -i)
-						t:SetTexture(0, 0, 0, 1)
+						t:SetColorTexture(0, 0, 0, 1)
 						self.ticks[-i] = t
 					end
 					
