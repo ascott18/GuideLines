@@ -1,7 +1,7 @@
 ﻿
-## Interface: 80000
+## Interface: 90001
 ## Title: GuideLines
-## Version: 3.4.1
+## Version: 3.4.2
 ## Author: Cybeloras of Aerie Peak
 ## Notes: Allows you to create guides to aid in UI element placement.
 ## SavedVariablesPerCharacter: GuideLinesDB
