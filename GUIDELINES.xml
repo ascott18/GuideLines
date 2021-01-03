@@ -67,13 +67,23 @@
 				local MeasureFrame = CreateFrame("Frame")
 				function GuideLines:SetAnchoredPoints(guide)
 					-- stolen from TMW, with modifications
-					MeasureFrame:ClearAllPoints()
-					MeasureFrame:SetPoint("TOPRIGHT", guide, "CENTER")
-					MeasureFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT")
+									
+					local x1, x2, y1, y2
+					x1, y1 = guide:GetCenter()
+					x2 = UIParent:GetLeft()
+					y2 = UIParent:GetBottom()
 
 
-					local X = MeasureFrame:GetWidth()/UIParent:GetScale()/guide:GetScale()
-					local Y = MeasureFrame:GetHeight()/UIParent:GetScale()/guide:GetScale()
+					x1 = x1*guide:GetEffectiveScale()
+					y1 = y1*guide:GetEffectiveScale()
+					x2 = x2*UIParent:GetEffectiveScale()
+					y2 = y2*UIParent:GetEffectiveScale()
+					local factor = guide:GetEffectiveScale()
+
+					local X = (x1-x2)/factor
+					local Y = (y1-y2)/factor
+
+					
 					if guide.db.template == "GuideLines_VertGuideTemplate" then
 						Y = 0
 					elseif guide.db.template == "GuideLines_HorizGuideTemplate" then
